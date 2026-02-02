@@ -4,6 +4,7 @@
  */
 package com.mycompany.aventura;
 
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -12,25 +13,43 @@ import java.util.Scanner;
  */
 public class Juego {
 
-    Arma arma = new Arma("Cuchillo", 6);
     Enemigo enemigo = new Enemigo("Monstruo", 10, 3);
-
+    
     public void escenaInicial() {
         System.out.println("La Historia impieza");
         eligirMenu();
     }
 
-    //metodo oara crear jugador
+    public Arma[] crearArrayDeArmas() {
+        Arma arma1 = new Arma("Cuchillo", 6);
+        Arma arma2 = new Arma("Espada larga", 7);
+        Arma arma3 = new Arma("Espada", 5);
+        Arma arma4 = new Arma("Porra", 8);
+        Arma[] armas = {arma1, arma2, arma3, arma4};
+        return armas;
+    }
+
+    public void cambiarArma(Jugador jugador) {
+        Arma[] armas = crearArrayDeArmas();
+        Random r = new Random();
+        int randomArma = r.nextInt(0, 3);
+        jugador.getArma().setTipo(armas[randomArma].getTipo());
+        jugador.getArma().setDanioMaximo(armas[randomArma].getDanioMaximo());
+    }
+
+    //metodo para crear jugador
     public Jugador crearJugador() {
+        Arma[] armas=crearArrayDeArmas();
         Scanner teclado = new Scanner(System.in);
         System.out.println("Introduce nombre del jugador");
         String nombre = teclado.nextLine();
-        Jugador jugador = new Jugador(nombre, 10, arma);
+        Jugador jugador = new Jugador(nombre, 10, armas[0]);
         return jugador;
     }
 
     //metodo de combate
     public void norte(Jugador jugador) {
+        
         System.out.println("Emcuentras un monstruo y se va a iniciar el combate");
         System.out.println("Partida empieza");
         System.out.println("El jugador ataca al enemigo");
@@ -59,7 +78,6 @@ public class Juego {
         System.out.println("FIN DEL JUEGO");
     }
 
-  
     //principal metodo para eligir acción
     public void eligirMenu() {
         Scanner teclado = new Scanner(System.in);
@@ -86,4 +104,5 @@ public class Juego {
             }
         }
     }
+
 }
