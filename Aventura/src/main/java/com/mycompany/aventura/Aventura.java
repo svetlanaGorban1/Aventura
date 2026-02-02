@@ -12,7 +12,7 @@ public class Aventura {
     public static void main(String[] args) {
         Juego juego = new Juego();
 
-       //primera escena con menu
+        //primera escena con menu
         juego.escenaInicial();
     }
 }

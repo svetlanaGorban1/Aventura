@@ -12,12 +12,14 @@ public class Jugador {
 
     private String nombre;
     private int vida;
-    private Arma arma;
+    private Arma[] armas;
+    
+    
 
-    public Jugador(String nombre, int vida, Arma arma) {
+    public Jugador(String nombre, int vida, Arma[] armas) {
         this.nombre = nombre;
         this.vida = vida;
-        this.arma = arma;
+        this.armas = armas;
     }
 
     public String getNombre() {
@@ -36,12 +38,12 @@ public class Jugador {
         this.vida = vida;
     }
 
-    public Arma getArma() {
-        return arma;
+    public Arma[] getArma() {
+        return armas;
     }
 
-    public void setArma(Arma arma) {
-        this.arma = arma;
+    public void setArma(Arma[] armas) {
+        this.armas = armas;
     }
 
     public void restarVida(int cantidad) {
