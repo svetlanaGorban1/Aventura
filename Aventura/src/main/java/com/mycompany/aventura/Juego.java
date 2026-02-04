@@ -17,12 +17,15 @@ public class Juego {
     private Jugador jugador;
     private int min;
     private int max;
-   // boolean enemigoMuerto=true;
+    boolean enemigoMuerto;
     Arma arma1 = new Arma("Cuchillo", 6);
     Arma arma2 = new Arma("Espada larga", 7);
     Arma arma3 = new Arma("Espada", 5);
     Arma arma4 = new Arma("Porra", 8);
     Arma[] armas = {arma1, arma2, arma3, arma4};
+    Arma armaEsp1 = new Arma("Espada de acero", 7);
+    Arma armaEsp2 = new Arma("Sable", 8);
+    Arma[] armasEspecial = {armaEsp1, armaEsp2};
     Scanner teclado = new Scanner(System.in);
 
     public int leerOpcion(int min, int max) {
@@ -74,7 +77,8 @@ public class Juego {
 
     public void buenFinal() {
         System.out.println("El jugador ganado el combate!");
-        eligirMenu();
+        enemigoMuerto = true;
+                eligirMenu();
     }
 
     public void norte() {
@@ -85,15 +89,27 @@ public class Juego {
         } else {
             buenFinal();
         }
-    }
+            }
 
     //methodo que cambio citio y vida
     public void bosque() {
-        System.out.println("Lugar de la batalla ha sido cambiado");
-        System.out.println("Jugador curar vida(+2) y enemigo curar su vida(+2)");
         jugador.sumarVida(2);
-        enemigo.setVida(enemigo.getVida() + 2);
-        
+        System.out.println("Lugar de la batalla ha sido cambiado");
+        System.out.println("Jugador curar vida(+2) y el jugador tiene vida: "
+        +jugador.getVida());
+       if (enemigoMuerto == true) {
+            jugador.setArma(armasEspecial);
+            System.out.println("Ahora el jugador tiene armas: " + jugador.getArma()[0].getTipo()
+                    + " y " + jugador.getArma()[1].getTipo());
+        }else{
+           System.out.println("Comienza la batalla");
+           combateConMonstrue();
+       }
+       if (combateConMonstrue()) {
+            malFinal();
+        } else {
+            buenFinal();
+        }
     }
 
     //fin del huego
@@ -104,7 +120,7 @@ public class Juego {
 
     //principal metodo para eligir acción
     public void eligirMenu() {
-        System.out.println("¿Qué dirección eliges? 1.norte 2.bosque 3.sur");
+        System.out.println(jugador.getNombre()+" ¿Qué dirección eliges? 1.norte 2.bosque 3.sur");
         int menu = leerOpcion(1, 3);
         switch (menu) {
             case 1:
