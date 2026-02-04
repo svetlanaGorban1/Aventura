@@ -78,7 +78,7 @@ public class Juego {
     public void buenFinal() {
         System.out.println("El jugador ganado el combate!");
         enemigoMuerto = true;
-                eligirMenu();
+        eligirMenu();
     }
 
     public void norte() {
@@ -89,23 +89,23 @@ public class Juego {
         } else {
             buenFinal();
         }
-            }
+    }
 
     //methodo que cambio citio y vida
     public void bosque() {
         jugador.sumarVida(2);
         System.out.println("Lugar de la batalla ha sido cambiado");
         System.out.println("Jugador curar vida(+2) y el jugador tiene vida: "
-        +jugador.getVida());
-       if (enemigoMuerto == true) {
+                + jugador.getVida());
+        if (enemigoMuerto == true) {
             jugador.setArma(armasEspecial);
             System.out.println("Ahora el jugador tiene armas: " + jugador.getArma()[0].getTipo()
                     + " y " + jugador.getArma()[1].getTipo());
-        }else{
-           System.out.println("Comienza la batalla");
-           combateConMonstrue();
-       }
-       if (combateConMonstrue()) {
+        } else {
+            System.out.println("Comienza la batalla");
+            combateConMonstrue();
+        }
+        if (combateConMonstrue()) {
             malFinal();
         } else {
             buenFinal();
@@ -118,9 +118,13 @@ public class Juego {
         System.out.println("FIN DEL JUEGO");
     }
 
+   /* public void golpeCriticoEnCastillo() {
+
+    }
+*/
     //principal metodo para eligir acción
     public void eligirMenu() {
-        System.out.println(jugador.getNombre()+" ¿Qué dirección eliges? 1.norte 2.bosque 3.sur");
+        System.out.println(" ¿Qué dirección eliges? "+jugador.getNombre()+" 1.norte 2.bosque 3.sur");
         int menu = leerOpcion(1, 3);
         switch (menu) {
             case 1:
@@ -132,6 +136,9 @@ public class Juego {
             case 3:
                 sur();
                 break;
+            /*case 4:
+                golpeCriticoEnCastillo();
+                break;*/
         }
     }
 }
