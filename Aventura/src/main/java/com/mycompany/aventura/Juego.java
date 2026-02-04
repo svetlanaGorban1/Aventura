@@ -15,12 +15,26 @@ public class Juego {
 
     private Enemigo enemigo;
     private Jugador jugador;
+    private int min;
+    private int max;
+   // boolean enemigoMuerto=true;
     Arma arma1 = new Arma("Cuchillo", 6);
     Arma arma2 = new Arma("Espada larga", 7);
     Arma arma3 = new Arma("Espada", 5);
     Arma arma4 = new Arma("Porra", 8);
     Arma[] armas = {arma1, arma2, arma3, arma4};
     Scanner teclado = new Scanner(System.in);
+
+    public int leerOpcion(int min, int max) {
+        this.min = min;
+        this.max = max;
+        int opcion = 0;
+        while (opcion < min || opcion > max) {
+            System.out.println("Introduce un numero desde " + min + " hasta " + max);
+            opcion = teclado.nextInt();
+        }
+        return opcion;
+    }
 
     public void escenaInicial() {
         System.out.println("La Historia impieza");
@@ -32,63 +46,76 @@ public class Juego {
     }
 
     //metodo de combate
-    public void combateConMonstrue() {
+    public boolean combateConMonstrue() {
+        boolean jugadorMuerte = false;
         Random r = new Random();
         while (jugador.getVida() > 0 && enemigo.getVida() > 0) {
-//Danio que el jugador hace de monstruo (numero aleatorio y arma aleatorio)
+            //Danio que el jugador hace de monstruo (numero aleatorio y arma aleatorio)
             int randomArma = r.nextInt(0, armas.length);
             int danioJugador = r.nextInt(0, jugador.getArma()[randomArma].getDanioMaximo());
             enemigo.setVida(enemigo.getVida() - danioJugador);
-            System.out.println("Atacas con " + enemigo.getTipo() + " y haces " + danioJugador + " de daño");
-//Si monstruo tiene vidas, el atace                    
+            //Si monstruo tiene vidas, el atace                    
             if (enemigo.getVida() >= 1) {
                 jugador.restarVida(enemigo.danioAtaque());
-                System.out.println("El goblin te ataca y te hace " + enemigo.danioAtaque() + " de daño");
             }
         }
         if (jugador.getVida() == 0) {
-            System.out.println("GAME OVER");
-        } else if (enemigo.getVida() <= 0) {
-            System.out.println("¡Has ganado el combate!");
+            jugadorMuerte = true;
+        } else {
+            jugadorMuerte = false;
         }
+        return jugadorMuerte;
+    }
+
+    public void malFinal() {
+        System.out.println("El jugador perdió");
+        sur();
+    }
+
+    public void buenFinal() {
+        System.out.println("El jugador ganado el combate!");
+        eligirMenu();
     }
 
     public void norte() {
         System.out.println("Emcuentras un monstruo y se va a iniciar el combate");
-        System.out.println("Partida empieza");
         combateConMonstrue();
+        if (combateConMonstrue()) {
+            malFinal();
+        } else {
+            buenFinal();
+        }
     }
 
     //methodo que cambio citio y vida
     public void bosque() {
         System.out.println("Lugar de la batalla ha sido cambiado");
-        System.out.println("Jugador curar vida(+2) y enemigo curar su vida(+1)");
+        System.out.println("Jugador curar vida(+2) y enemigo curar su vida(+2)");
         jugador.sumarVida(2);
-        enemigo.setVida(enemigo.getVida() + 1);
+        enemigo.setVida(enemigo.getVida() + 2);
+        
     }
 
     //fin del huego
     public void sur() {
+        System.out.println("Aquí es donde termina el juego");
         System.out.println("FIN DEL JUEGO");
     }
 
     //principal metodo para eligir acción
     public void eligirMenu() {
-        int menu = 0;
-        while (menu != 3) {
-            System.out.println("¿Qué dirección eliges? 1.norte 2.bosque 3.sur");
-            menu = teclado.nextInt();
-            switch (menu) {
-                case 1:
-                    norte();
-                    break;
-                case 2:
-                    bosque();
-                    break;
-                case 3:
-                    sur();
-                    break;
-            }
+        System.out.println("¿Qué dirección eliges? 1.norte 2.bosque 3.sur");
+        int menu = leerOpcion(1, 3);
+        switch (menu) {
+            case 1:
+                norte();
+                break;
+            case 2:
+                bosque();
+                break;
+            case 3:
+                sur();
+                break;
         }
     }
 }

@@ -13,9 +13,7 @@ public class Jugador {
     private String nombre;
     private int vida;
     private Arma[] armas;
-    
-    
-
+        
     public Jugador(String nombre, int vida, Arma[] armas) {
         this.nombre = nombre;
         this.vida = vida;
