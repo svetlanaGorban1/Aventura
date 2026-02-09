@@ -51,4 +51,9 @@ public class Jugador {
     public void sumarVida(int cantidad) {
         vida += cantidad;
     }
+    
+     public int golpeCritico(int danio){
+        int danioDeGolpeCritico=danio*2;
+       return danioDeGolpeCritico;
+    }
 }
