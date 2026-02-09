@@ -13,7 +13,7 @@ import java.util.Scanner;
  */
 public class Juego {
 
-    private Enemigo enemigo;
+    private Enemigo[] enemigos;
     private Jugador jugador;
     private int min;
     private int max;
@@ -28,6 +28,13 @@ public class Juego {
     Arma[] armasEspecial = {armaEsp1, armaEsp2};
     Scanner teclado = new Scanner(System.in);
 
+    public Juego() {
+        this.enemigos = new Enemigo[3];
+        enemigos[0] = new Enemigo("Monstruo", 10, 3);
+        enemigos[1] = new Enemigo("Gigante", 10, 5);
+        enemigos[2] = new Enemigo("Mago", 1, 7);
+    }
+
     public int leerOpcion(int min, int max) {
         this.min = min;
         this.max = max;
@@ -41,11 +48,19 @@ public class Juego {
 
     public void escenaInicial() {
         System.out.println("La Historia impieza");
-        enemigo = new Enemigo("Monstruo", 10, 3);
         System.out.println("Introduce nombre del jugador");
         String nombre = teclado.nextLine();
         jugador = new Jugador(nombre, 10, armas);
         eligirMenu();
+    }
+
+    public Enemigo buscarEnemigo() {
+        for (int i = 0; i < enemigos.length; i++) {
+            if (enemigos[i] != null && enemigos[i].isDerrotado() == false) {
+                return enemigos[i];
+            }
+        }
+        return null;
     }
 
     //metodo de combate
@@ -53,15 +68,22 @@ public class Juego {
         boolean jugadorMuerte = false;
         Random r = new Random();
         int menu = 0;
-        while (jugador.getVida() > 0 && enemigo.getVida() > 0 && menu != 3) {
-            System.out.println("¿Que queres haser? 1.Atacar 2.Curarte(+2HP) 3.Huir");
+        Enemigo enemigo = enemigos[0];
+        int danioMonstruo;
+        int randomArma = r.nextInt(0, armas.length);
+        do {
+            System.out.println("¿Que queres haser? 1.Atacar 2.Curarte(+2HP) 3.Fin del juego");
+            enemigo = buscarEnemigo();
+            if (enemigo == null) {
+                sur();
+            }
+
             menu = teclado.nextInt();
-            int danioMonstruo;
             switch (menu) {
 //Opcion para atacar
                 case 1:
                     int probabilidad = r.nextInt(0, 100);
-                    System.out.println("Nombre:" + jugador.getNombre() + ", Vida: " + jugador.getVida() + ", Tipo de arma: "
+                    System.out.println("Nombre:" + jugador.getNombre() + " Vida:" + jugador.getVida() + " Tipo de arma:"
                             + jugador.getArma()[0].getTipo() + ", Danio maximo " + jugador.getArma()[0].getDanioMaximo());
 //Danio que el jugador hace de monstruo (numero aleatorio)
                     int danioJugador = r.nextInt(0, jugador.getArma()[0].getDanioMaximo());
@@ -70,6 +92,9 @@ public class Juego {
                         danioJugador = jugador.golpeCritico(danioJugador);
                     }
                     enemigo.setVida(enemigo.getVida() - danioJugador);
+                    if (enemigo.getVida() <= 0) {
+                        enemigo.setDerrotado(true);
+                    }
                     System.out.println("Atacas con " + enemigo.getTipo() + " y haces " + danioJugador + " de daño");
 //Si enemigo tiene vidas, el atace                    
                     if (enemigo.getVida() >= 1) {
@@ -80,35 +105,25 @@ public class Juego {
                     break;
 //Opcion para curar hp
                 case 2:
-                    System.out.println("Nombre:" + jugador.getNombre() + " ,HP: " + jugador.getVida() + " ,Tipo de arma: "
-                            + jugador.getArma()[0].getTipo() + " ,Danio maximo " + jugador.getArma()[0].getDanioMaximo());
+                    System.out.println("Nombre:" + jugador.getNombre() + " Vida:" + jugador.getVida() + " Tipo de arma:"
+                            + jugador.getArma()[randomArma].getTipo() + " Danio maximo" + jugador.getArma()[randomArma].getDanioMaximo());
                     jugador.sumarVida(2);
                     System.out.println("Te curas 2 puntos");
-                    danioMonstruo = r.nextInt(0, enemigo.getDanioMaximo());
-                    jugador.restarVida(danioMonstruo);
-                    System.out.println("El enemigo te ataca y te hace " + danioMonstruo + " de daño");
+                    jugador.restarVida(enemigo.danioAtaque());
+                    System.out.println("El enemigo te ataca y te hace " + enemigo.danioAtaque() + " de daño");
                     break;
                 case 3:
-                    System.out.println("Has huido. FIN DEL JUEGO");
+                    System.out.println("FIN DEL JUEGO");
                     break;
             }
+        } while (jugador.getVida() > 0 && enemigo.getVida() > 0 && menu != 3);
 
-            while (jugador.getVida() > 0 && enemigo.getVida() > 0) {
-                //Danio que el jugador hace de enemigo (numero aleatorio y arma aleatorio)
-                int randomArma = r.nextInt(0, armas.length);
-                int danioJugador = r.nextInt(0, jugador.getArma()[randomArma].getDanioMaximo());
-                enemigo.setVida(enemigo.getVida() - danioJugador);
-                //Si enemigo tiene vidas, el atace                    
-                if (enemigo.getVida() >= 1) {
-                    jugador.restarVida(enemigo.danioAtaque());
-                }
-            }
-            if (jugador.getVida() == 0) {
-                jugadorMuerte = true;
-            } else {
-                jugadorMuerte = false;
-            }
+        if (jugador.getVida() <= 0) {
+            jugadorMuerte = true;
+        } else {
+            jugadorMuerte = false;
         }
+
         return jugadorMuerte;
     }
 
@@ -160,10 +175,6 @@ public class Juego {
         System.out.println("FIN DEL JUEGO");
     }
 
-    /* public void golpeCriticoEnCastillo() {
-
-    }
-     */
     //principal metodo para eligir acción
     public void eligirMenu() {
         System.out.println(" ¿Qué dirección eliges? " + jugador.getNombre() + " 1.norte 2.bosque 3.sur");
@@ -178,9 +189,6 @@ public class Juego {
             case 3:
                 sur();
                 break;
-            /*case 4:
-                golpeCriticoEnCastillo();
-                break;*/
         }
     }
 }

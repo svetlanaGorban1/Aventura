@@ -15,6 +15,15 @@ public class Enemigo {
     private String tipo;
     private int vida;
     private int danioMaximo;
+    private boolean derrotado;
+
+    public boolean isDerrotado() {
+        return derrotado;
+    }
+
+    public void setDerrotado(boolean derrotado) {
+        this.derrotado = derrotado;
+    }
 
     public Enemigo(String tipo, int vida, int danioMaximo) {
         this.tipo = tipo;
