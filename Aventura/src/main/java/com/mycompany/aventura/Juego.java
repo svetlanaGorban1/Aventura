@@ -70,53 +70,54 @@ public class Juego {
         int menu = 0;
         Enemigo enemigo = enemigos[0];
         int danioMonstruo;
-        int randomArma = r.nextInt(0, armas.length);
-        do {
-            System.out.println("¿Que queres haser? 1.Atacar 2.Curarte(+2HP) 3.Fin del juego");
+        int randomArma = r.nextInt(0, armas.length - 1);
+
+        while (jugador.getVida() > 0 && enemigo.getVida() > 0 && menu != 3) {
+            System.out.println("¿Que queres haser? 1.Atacar 2.Curar(vida+2) 3.Fin del juego");
+            menu = teclado.nextInt();
             enemigo = buscarEnemigo();
             if (enemigo == null) {
                 sur();
-            }
-
-            menu = teclado.nextInt();
-            switch (menu) {
+            } else {
+                switch (menu) {
 //Opcion para atacar
-                case 1:
-                    int probabilidad = r.nextInt(0, 100);
-                    System.out.println("Nombre:" + jugador.getNombre() + " Vida:" + jugador.getVida() + " Tipo de arma:"
-                            + jugador.getArma()[0].getTipo() + ", Danio maximo " + jugador.getArma()[0].getDanioMaximo());
+                    case 1:
+                        int probabilidad = r.nextInt(0, 100);
+                        System.out.println("Nombre:" + jugador.getNombre() + " Vida:" + jugador.getVida() + " Tipo de arma:"
+                                + jugador.getArma()[0].getTipo() + ", Danio maximo " + jugador.getArma()[0].getDanioMaximo());
 //Danio que el jugador hace de monstruo (numero aleatorio)
-                    int danioJugador = r.nextInt(0, jugador.getArma()[0].getDanioMaximo());
+                        int danioJugador = r.nextInt(0, jugador.getArma()[0].getDanioMaximo());
 //Probabilidad 20% y daño*2 
-                    if (probabilidad < 20) {
-                        danioJugador = jugador.golpeCritico(danioJugador);
-                    }
-                    enemigo.setVida(enemigo.getVida() - danioJugador);
-                    if (enemigo.getVida() <= 0) {
-                        enemigo.setDerrotado(true);
-                    }
-                    System.out.println("Atacas con " + enemigo.getTipo() + " y haces " + danioJugador + " de daño");
-//Si enemigo tiene vidas, el atace                    
-                    if (enemigo.getVida() >= 1) {
-                        danioMonstruo = r.nextInt(0, enemigo.getDanioMaximo());
-                        jugador.restarVida(danioMonstruo);
-                        System.out.println("El enemigo te ataca y te hace " + danioMonstruo + " de daño");
-                    }
-                    break;
-//Opcion para curar hp
-                case 2:
-                    System.out.println("Nombre:" + jugador.getNombre() + " Vida:" + jugador.getVida() + " Tipo de arma:"
-                            + jugador.getArma()[randomArma].getTipo() + " Danio maximo" + jugador.getArma()[randomArma].getDanioMaximo());
-                    jugador.sumarVida(2);
-                    System.out.println("Te curas 2 puntos");
-                    jugador.restarVida(enemigo.danioAtaque());
-                    System.out.println("El enemigo te ataca y te hace " + enemigo.danioAtaque() + " de daño");
-                    break;
-                case 3:
-                    System.out.println("FIN DEL JUEGO");
-                    break;
+                        if (probabilidad < 20) {
+                            danioJugador = jugador.golpeCritico(danioJugador);
+                        }
+                        enemigo.setVida(enemigo.getVida() - danioJugador);
+                        if (enemigo.getVida() <= 0) {
+                            enemigo.setDerrotado(true);
+                        }
+                        System.out.println("Atacas con " + enemigo.getTipo() + " y haces " + danioJugador + " de daño");
+//Si enemigo tiene vida, el atace                    
+                        if (enemigo.getVida() >= 1) {
+                            danioMonstruo = r.nextInt(0, enemigo.getDanioMaximo());
+                            jugador.restarVida(danioMonstruo);
+                            System.out.println("El enemigo te ataca y te hace " + danioMonstruo + " de daño");
+                        }
+                        break;
+//Opcion para curar vida
+                    case 2:
+                        System.out.println("Nombre:" + jugador.getNombre() + " Vida:" + jugador.getVida() + " Tipo de arma:"
+                                + jugador.getArma()[randomArma].getTipo() + " Danio maximo" + jugador.getArma()[randomArma].getDanioMaximo());
+                        jugador.sumarVida(2);
+                        System.out.println("Te curas 2 puntos");
+                        jugador.restarVida(enemigo.danioAtaque());
+                        System.out.println("El enemigo te ataca y te hace " + enemigo.danioAtaque() + " de daño");
+                        break;
+                    case 3:
+                        System.out.println("FIN DEL JUEGO");
+                        break;
+                }
             }
-        } while (jugador.getVida() > 0 && enemigo.getVida() > 0 && menu != 3);
+        }
 
         if (jugador.getVida() <= 0) {
             jugadorMuerte = true;
@@ -127,20 +128,20 @@ public class Juego {
     }
 
     public void malFinal() {
+        System.out.println(jugador.getVida());
         System.out.println("El jugador perdió");
-        sur();
     }
 
     public void buenFinal() {
         System.out.println("El jugador ganado el combate!");
         enemigoMuerto = true;
-        eligirMenu();
+        //eligirMenu();
     }
 
     public void norte() {
         System.out.println("Emcuentras un monstruo y se va a iniciar el combate");
-        combateConMonstrue();
-        if (combateConMonstrue()) {
+        boolean resultado = combateConMonstrue();
+        if (resultado == true) {
             malFinal();
         } else {
             buenFinal();
@@ -156,29 +157,31 @@ public class Juego {
         jugador.setArma(armasEspecial);
         System.out.println("Ahora el jugador tiene armas: " + jugador.getArma()[0].getTipo()
                 + " y " + jugador.getArma()[1].getTipo());
-        eligirMenu();
     }
 
-    //fin del huego
+    //fin del juego
     public void sur() {
         System.out.println("Aquí es donde termina el juego");
         System.out.println("FIN DEL JUEGO");
+        enemigoMuerto = false;
     }
 
     //principal metodo para eligir acción
     public void eligirMenu() {
-        System.out.println(" ¿Qué dirección eliges, " + jugador.getNombre() + "? 1.norte 2.bosque 3.sur");
-        int menu = leerOpcion(1, 3);
-        switch (menu) {
-            case 1:
-                norte();
-                break;
-            case 2:
-                bosque();
-                break;
-            case 3:
-                sur();
-                break;
-        }
+        do {
+            System.out.println(" ¿Qué dirección eliges, " + jugador.getNombre() + "? 1.norte 2.bosque 3.sur");
+            int menu = leerOpcion(1, 3);
+            switch (menu) {
+                case 1:
+                    norte();
+                    break;
+                case 2:
+                    bosque();
+                    break;
+                case 3:
+                    sur();
+                    break;
+            }
+        } while (enemigoMuerto);
     }
 }
