@@ -17,7 +17,8 @@ public class Juego {
     private Jugador jugador;
     private int min;
     private int max;
-    boolean enemigoMuerto;
+    private int contador;
+    boolean enemigoMuerte;
     Arma arma1 = new Arma("Cuchillo", 6);
     Arma arma2 = new Arma("Espada larga", 7);
     Arma arma3 = new Arma("Espada", 5);
@@ -73,7 +74,7 @@ public class Juego {
         int randomArma = r.nextInt(0, armas.length - 1);
 
         while (jugador.getVida() > 0 && enemigo.getVida() > 0 && menu != 3) {
-            System.out.println("¿Que queres haser? 1.Atacar 2.Curar(vida+2) 3.Fin del juego");
+            System.out.println("¿Que queres haser? 1.Atacar 2.Curar(vida+2) 3.Fin del combate");
             menu = teclado.nextInt();
             enemigo = buscarEnemigo();
             if (enemigo == null) {
@@ -109,11 +110,10 @@ public class Juego {
                                 + jugador.getArma()[randomArma].getTipo() + " Danio maximo" + jugador.getArma()[randomArma].getDanioMaximo());
                         jugador.sumarVida(2);
                         System.out.println("Te curas 2 puntos");
-                        jugador.restarVida(enemigo.danioAtaque());
-                        System.out.println("El enemigo te ataca y te hace " + enemigo.danioAtaque() + " de daño");
                         break;
                     case 3:
-                        System.out.println("FIN DEL JUEGO");
+                        System.out.println("FIN DEL COMBATE");
+                        eligirMenu();
                         break;
                 }
             }
@@ -123,18 +123,18 @@ public class Juego {
             jugadorMuerte = true;
         } else {
             jugadorMuerte = false;
+            contador++;
         }
         return jugadorMuerte;
     }
 
     public void malFinal() {
-        System.out.println(jugador.getVida());
         System.out.println("El jugador perdió");
     }
 
     public void buenFinal() {
-        System.out.println("El jugador ganado el combate!");
-        enemigoMuerto = true;
+        System.out.println("El jugador ganado el combate " + contador + " veces");
+        enemigoMuerte = true;
         //eligirMenu();
     }
 
@@ -163,14 +163,14 @@ public class Juego {
     public void sur() {
         System.out.println("Aquí es donde termina el juego");
         System.out.println("FIN DEL JUEGO");
-        enemigoMuerto = false;
     }
 
     //principal metodo para eligir acción
     public void eligirMenu() {
+        int menu = 0;
         do {
             System.out.println(" ¿Qué dirección eliges, " + jugador.getNombre() + "? 1.norte 2.bosque 3.sur");
-            int menu = leerOpcion(1, 3);
+            menu = leerOpcion(1, 3);
             switch (menu) {
                 case 1:
                     norte();
@@ -182,6 +182,6 @@ public class Juego {
                     sur();
                     break;
             }
-        } while (enemigoMuerto);
+        } while (enemigoMuerte == false && menu != 3);
     }
 }
