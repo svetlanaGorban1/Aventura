@@ -4,6 +4,7 @@
  */
 package com.mycompany.aventura;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -13,27 +14,33 @@ import java.util.Scanner;
  */
 public class Juego {
 
-    private Enemigo[] enemigos;
+   private ArrayList<Enemigo> enemigos;
+    private ArrayList<Arma> armas;
+    private ArrayList<Arma> armasEspecial;
     private Jugador jugador;
     private int min;
     private int max;
     private int contador;
-    boolean enemigoMuerte;
-    Arma arma1 = new Arma("Cuchillo", 6);
-    Arma arma2 = new Arma("Espada larga", 7);
-    Arma arma3 = new Arma("Espada", 5);
-    Arma arma4 = new Arma("Porra", 8);
-    Arma[] armas = {arma1, arma2, arma3, arma4};
-    Arma armaEsp1 = new Arma("Espada de acero", 7);
-    Arma armaEsp2 = new Arma("Sable", 8);
-    Arma[] armasEspecial = {armaEsp1, armaEsp2};
+    boolean enemigoMuerte = false;
+
     Scanner teclado = new Scanner(System.in);
 
     public Juego() {
-        this.enemigos = new Enemigo[3];
-        enemigos[0] = new Enemigo("Monstruo", 10, 3);
-        enemigos[1] = new Enemigo("Gigante", 10, 5);
-        enemigos[2] = new Enemigo("Mago", 1, 7);
+        enemigos = new ArrayList<>();
+        enemigos.add(new Enemigo("Monstruo", 10, 3));
+        enemigos.add(new Enemigo("Monstruo", 10, 3));
+        enemigos.add(new Enemigo("Gigante", 10, 5));
+        enemigos.add(new Enemigo("Mago", 1, 7));
+
+        armas = new ArrayList<>();
+        armas.add(new Arma("Cuchillo", 6));
+        armas.add(new Arma("Espada larga", 7));
+        armas.add(new Arma("Espada", 5));
+        armas.add(new Arma("Porra", 8));
+
+        armasEspecial = new ArrayList<>();
+        armasEspecial.add(new Arma("Espada de acero", 7));
+        armasEspecial.add(new Arma("Sable", 8));
     }
 
     public int leerOpcion(int min, int max) {
@@ -56,9 +63,9 @@ public class Juego {
     }
 
     public Enemigo buscarEnemigo() {
-        for (int i = 0; i < enemigos.length; i++) {
-            if (enemigos[i] != null && enemigos[i].isDerrotado() == false) {
-                return enemigos[i];
+        for (Enemigo en : enemigos) {
+            if (en != null && en.isDerrotado() == false) {
+                return en;
             }
         }
         return null;
@@ -69,11 +76,11 @@ public class Juego {
         boolean jugadorMuerte = false;
         Random r = new Random();
         int menu = 0;
-        Enemigo enemigo = enemigos[0];
+        Enemigo enemigo = enemigos.get(0);
         int danioMonstruo;
-        int randomArma = r.nextInt(0, armas.length - 1);
+        int randomArma = r.nextInt(0, armas.size()-1);
 
-        while (jugador.getVida() > 0 && enemigo.getVida() > 0 && menu != 3) {
+        while (enemigo != null && jugador.getVida() > 0 && enemigo.getVida() > 0 && menu != 3) {
             System.out.println("¿Que queres haser? 1.Atacar 2.Curar(vida+2) 3.Fin del combate");
             menu = teclado.nextInt();
             enemigo = buscarEnemigo();
@@ -85,9 +92,10 @@ public class Juego {
                     case 1:
                         int probabilidad = r.nextInt(0, 100);
                         System.out.println("Nombre:" + jugador.getNombre() + " Vida:" + jugador.getVida() + " Tipo de arma:"
-                                + jugador.getArma()[0].getTipo() + ", Danio maximo " + jugador.getArma()[0].getDanioMaximo());
+                                + jugador.getArma().get(0).getTipo() + ", Danio maximo "
+                                + jugador.getArma().get(0).getDanioMaximo());
 //Danio que el jugador hace de monstruo (numero aleatorio)
-                        int danioJugador = r.nextInt(0, jugador.getArma()[0].getDanioMaximo());
+                        int danioJugador = r.nextInt(0, jugador.getArma().get(0).getDanioMaximo());
 //Probabilidad 20% y daño*2 
                         if (probabilidad < 20) {
                             danioJugador = jugador.golpeCritico(danioJugador);
@@ -107,13 +115,13 @@ public class Juego {
 //Opcion para curar vida
                     case 2:
                         System.out.println("Nombre:" + jugador.getNombre() + " Vida:" + jugador.getVida() + " Tipo de arma:"
-                                + jugador.getArma()[randomArma].getTipo() + " Danio maximo" + jugador.getArma()[randomArma].getDanioMaximo());
+                                + jugador.getArma().get(randomArma).getTipo() + " Danio maximo"
+                                + jugador.getArma().get(randomArma).getDanioMaximo());
                         jugador.sumarVida(2);
                         System.out.println("Te curas 2 puntos");
                         break;
                     case 3:
                         System.out.println("FIN DEL COMBATE");
-                        eligirMenu();
                         break;
                 }
             }
@@ -123,8 +131,13 @@ public class Juego {
             jugadorMuerte = true;
         } else {
             jugadorMuerte = false;
-            contador++;
         }
+
+        /* if (jugadorMuerte==true){
+            malFinal();
+        }else{
+            buenFinal();
+        }*/
         return jugadorMuerte;
     }
 
@@ -133,9 +146,9 @@ public class Juego {
     }
 
     public void buenFinal() {
-        System.out.println("El jugador ganado el combate " + contador + " veces");
-        enemigoMuerte = true;
-        //eligirMenu();
+        System.out.println("El jugador ganado el combate ");
+        //  enemigoMuerte = true;
+        //  eligirMenu();
     }
 
     public void norte() {
@@ -143,8 +156,6 @@ public class Juego {
         boolean resultado = combateConMonstrue();
         if (resultado == true) {
             malFinal();
-        } else {
-            buenFinal();
         }
     }
 
@@ -155,8 +166,8 @@ public class Juego {
         System.out.println("Jugador curar vida(+2) y el jugador tiene vida: "
                 + jugador.getVida());
         jugador.setArma(armasEspecial);
-        System.out.println("Ahora el jugador tiene armas: " + jugador.getArma()[0].getTipo()
-                + " y " + jugador.getArma()[1].getTipo());
+        System.out.println("Ahora el jugador tiene armas: " + jugador.getArma().get(0).getTipo()
+                + " y " + jugador.getArma().get(1).getTipo());
     }
 
     //fin del juego
@@ -169,7 +180,7 @@ public class Juego {
     public void eligirMenu() {
         int menu = 0;
         do {
-            System.out.println(" ¿Qué dirección eliges, " + jugador.getNombre() + "? 1.norte 2.bosque 3.sur");
+            System.out.println(" ¿Qué dirección eliges, " + jugador.getNombre() + "? 1.norte 2.bosque 3.FIN");
             menu = leerOpcion(1, 3);
             switch (menu) {
                 case 1:
@@ -182,6 +193,6 @@ public class Juego {
                     sur();
                     break;
             }
-        } while (enemigoMuerte == false && menu != 3);
+        } while (menu != 3);
     }
 }

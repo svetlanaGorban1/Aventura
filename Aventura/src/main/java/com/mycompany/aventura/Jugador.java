@@ -10,14 +10,13 @@ package com.mycompany.aventura;
  */
 public class Jugador {
 
-    private String nombre;
-    private int vida;
-    private Arma[] armas;
-        
-    public Jugador(String nombre, int vida, Arma[] armas) {
+     private String nombre;
+    private Arma arma;
+
+    public Jugador(String nombre, Arma arma, int vida, int vidaMaxima) {
+        super(vida, vidaMaxima);
         this.nombre = nombre;
-        this.vida = vida;
-        this.armas = armas;
+        this.arma = arma;
     }
 
     public String getNombre() {
@@ -28,32 +27,22 @@ public class Jugador {
         this.nombre = nombre;
     }
 
-    public int getVida() {
-        return vida;
+    public Arma getArma() {
+        return arma;
     }
 
-    public void setVida(int vida) {
-        this.vida = vida;
+    public void setArma(Arma arma) {
+        this.arma = arma;
     }
 
-    public Arma[] getArma() {
-        return armas;
+    public int golpeCritico(int danio) {
+        int danioDeGolpeCritico = danio * 2;
+        return danioDeGolpeCritico;
     }
 
-    public void setArma(Arma[] armas) {
-        this.armas = armas;
-    }
-
-    public void restarVida(int cantidad) {
-        vida -= cantidad;
-    }
-
-    public void sumarVida(int cantidad) {
-        vida += cantidad;
-    }
-    
-     public int golpeCritico(int danio){
-        int danioDeGolpeCritico=danio*2;
-       return danioDeGolpeCritico;
+    @Override
+    public int atacar() {
+        int danio = arma.getDanioMaximo();
+        return danio;
     }
 }
