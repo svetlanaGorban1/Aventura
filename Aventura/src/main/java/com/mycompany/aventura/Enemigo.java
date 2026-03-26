@@ -10,10 +10,9 @@ import java.util.Random;
  *
  * @author damt110
  */
-public class Enemigo {
+public class Enemigo extends Personaje {
 
     private String tipo;
-    private int vida;
     private int danioMaximo;
     private boolean derrotado;
 
@@ -25,9 +24,9 @@ public class Enemigo {
         this.derrotado = derrotado;
     }
 
-    public Enemigo(String tipo, int vida, int danioMaximo) {
+    public Enemigo(String tipo, int danioMaximo, int vida, int vidaMaxima) {
+        super(vida, vidaMaxima);
         this.tipo = tipo;
-        this.vida = vida;
         this.danioMaximo = danioMaximo;
     }
 
@@ -39,14 +38,6 @@ public class Enemigo {
         this.tipo = tipo;
     }
 
-    public int getVida() {
-        return vida;
-    }
-
-    public void setVida(int vida) {
-        this.vida = vida;
-    }
-
     public int getDanioMaximo() {
         return danioMaximo;
     }
@@ -54,8 +45,9 @@ public class Enemigo {
     public void setDanioMaximo(int danioMaximo) {
         this.danioMaximo = danioMaximo;
     }
-    
-    public int danioAtaque() {
+
+    @Override
+    public int atacar() {
         Random r = new Random();
         int danio = r.nextInt(1, danioMaximo);
         return danio;

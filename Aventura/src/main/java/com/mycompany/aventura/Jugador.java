@@ -8,7 +8,7 @@ package com.mycompany.aventura;
  *
  * @author damt110
  */
-public class Jugador {
+public class Jugador extends Personaje{
 
      private String nombre;
     private Arma arma;

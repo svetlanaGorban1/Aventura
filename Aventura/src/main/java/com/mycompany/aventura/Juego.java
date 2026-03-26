@@ -27,10 +27,10 @@ public class Juego {
 
     public Juego() {
         enemigos = new ArrayList<>();
-        enemigos.add(new Enemigo("Monstruo", 10, 3));
-        enemigos.add(new Enemigo("Monstruo", 10, 3));
+        enemigos.add(new Enemigo("Monstruo", 8, 10, 10));
+       /* enemigos.add(new Enemigo("Monstruo", 10, 3));
         enemigos.add(new Enemigo("Gigante", 10, 5));
-        enemigos.add(new Enemigo("Mago", 1, 7));
+        enemigos.add(new Enemigo("Mago", 1, 7));*/
 
         armas = new ArrayList<>();
         armas.add(new Arma("Cuchillo", 6));
@@ -58,7 +58,7 @@ public class Juego {
         System.out.println("La Historia impieza");
         System.out.println("Introduce nombre del jugador");
         String nombre = teclado.nextLine();
-        jugador = new Jugador(nombre, 10, armas);
+        jugador = new Jugador(nombre, armas.get(0),5,10);
         eligirMenu();
     }
 
