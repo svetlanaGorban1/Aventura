@@ -12,8 +12,8 @@ import java.util.Random;
  */
 public class Goblin extends Enemigo {
 
-    public Goblin(String tipo, int danioMaximo, boolean derrotado, int vida, int vidaMaxima) {
-        super(tipo, danioMaximo, derrotado, vida, vidaMaxima);
+    public Goblin(String tipo, int danioMaximo, int vida, int vidaMaxima) {
+        super(tipo, danioMaximo, vida, vidaMaxima);
     }
 
     @Override

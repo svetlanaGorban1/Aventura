@@ -12,8 +12,8 @@ import java.util.Random;
  */
 public class Orco extends Enemigo implements Defendible {
 
-    public Orco(String tipo, int danioMaximo, boolean derrotado, int vida, int vidaMaxima) {
-        super(tipo, danioMaximo, derrotado, vida, vidaMaxima);
+    public Orco(String tipo, int danioMaximo, int vida, int vidaMaxima) {
+        super(tipo, danioMaximo, vida, vidaMaxima);
     }
 
     @Override

@@ -14,7 +14,7 @@ import java.util.Scanner;
  */
 public class Juego {
 
-   private ArrayList<Enemigo> enemigos;
+    private ArrayList<Enemigo> enemigos;
     private ArrayList<Arma> armas;
     private ArrayList<Arma> armasEspecial;
     private Jugador jugador;
@@ -28,7 +28,7 @@ public class Juego {
     public Juego() {
         enemigos = new ArrayList<>();
         enemigos.add(new Enemigo("Monstruo", 8, 10, 10));
-       /* enemigos.add(new Enemigo("Monstruo", 10, 3));
+        /* enemigos.add(new Enemigo("Monstruo", 10, 3));
         enemigos.add(new Enemigo("Gigante", 10, 5));
         enemigos.add(new Enemigo("Mago", 1, 7));*/
 
@@ -58,7 +58,7 @@ public class Juego {
         System.out.println("La Historia impieza");
         System.out.println("Introduce nombre del jugador");
         String nombre = teclado.nextLine();
-        jugador = new Jugador(nombre, armas.get(0),5,10);
+        jugador = new Jugador(nombre, armas.get(0), 5, 10);
         eligirMenu();
     }
 
@@ -78,7 +78,7 @@ public class Juego {
         int menu = 0;
         Enemigo enemigo = enemigos.get(0);
         int danioMonstruo;
-        int randomArma = r.nextInt(0, armas.size()-1);
+        int randomArma = r.nextInt(0, armas.size() - 1);
 
         while (enemigo != null && jugador.getVida() > 0 && enemigo.getVida() > 0 && menu != 3) {
             System.out.println("¿Que queres haser? 1.Atacar 2.Curar(vida+2) 3.Fin del combate");
@@ -90,17 +90,14 @@ public class Juego {
                 switch (menu) {
 //Opcion para atacar
                     case 1:
-                        int probabilidad = r.nextInt(0, 100);
                         System.out.println("Nombre:" + jugador.getNombre() + " Vida:" + jugador.getVida() + " Tipo de arma:"
-                                + jugador.getArma().get(0).getTipo() + ", Danio maximo "
-                                + jugador.getArma().get(0).getDanioMaximo());
+                                + jugador.getArma().getTipo() + ", Danio maximo "
+                                + jugador.getArma().getDanioMaximo());
 //Danio que el jugador hace de monstruo (numero aleatorio)
-                        int danioJugador = r.nextInt(0, jugador.getArma().get(0).getDanioMaximo());
+                        int danioJugador = r.nextInt(0, jugador.getArma().getDanioMaximo());
 //Probabilidad 20% y daño*2 
-                        if (probabilidad < 20) {
-                            danioJugador = jugador.golpeCritico(danioJugador);
-                        }
-                        enemigo.setVida(enemigo.getVida() - danioJugador);
+
+                        enemigo.atacar();
                         if (enemigo.getVida() <= 0) {
                             enemigo.setDerrotado(true);
                         }
@@ -108,7 +105,8 @@ public class Juego {
 //Si enemigo tiene vida, el atace                    
                         if (enemigo.getVida() >= 1) {
                             danioMonstruo = r.nextInt(0, enemigo.getDanioMaximo());
-                            jugador.restarVida(danioMonstruo);
+                            Jugador j=(Jugador) jugador;
+                            j.restarHP(danioMonstruo);
                             System.out.println("El enemigo te ataca y te hace " + danioMonstruo + " de daño");
                         }
                         break;
@@ -117,7 +115,7 @@ public class Juego {
                         System.out.println("Nombre:" + jugador.getNombre() + " Vida:" + jugador.getVida() + " Tipo de arma:"
                                 + jugador.getArma().get(randomArma).getTipo() + " Danio maximo"
                                 + jugador.getArma().get(randomArma).getDanioMaximo());
-                        jugador.sumarVida(2);
+                        j.sumarHP(2);
                         System.out.println("Te curas 2 puntos");
                         break;
                     case 3:
