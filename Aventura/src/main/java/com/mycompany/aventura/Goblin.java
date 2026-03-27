@@ -18,7 +18,12 @@ public class Goblin extends Enemigo {
 
     @Override
     public int atacar() {
-        int danioCritico = atacar() * 2;
-        return danioCritico;
+        int danio = super.atacar();
+        Random r = new Random();
+        int aleatorio = r.nextInt(1, 100);
+        if (aleatorio > 20) {
+            danio = danio * 2;
+        }
+        return danio;
     }
 }
