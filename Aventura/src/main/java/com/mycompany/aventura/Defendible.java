@@ -9,5 +9,5 @@ package com.mycompany.aventura;
  * @author damt110
  */
 public interface Defendible {
-    public int modificarDanioRecibido();
+    public int modificarDanioRecibido(int danio);
     }

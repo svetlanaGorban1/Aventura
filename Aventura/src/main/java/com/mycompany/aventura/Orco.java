@@ -22,10 +22,10 @@ public class Orco extends Enemigo implements Defendible {
         int danio = r.nextInt(0, getDanioMaximo());
         return danio;
     }
-    
+
     @Override
-    public int modificarDanioRecibido(){
-        int danio=atacar()-2;
-        return danio;
+    public int modificarDanioRecibido(int danio) {
+        int danioNuevo = danio-2;
+        return danioNuevo;
     }
 }

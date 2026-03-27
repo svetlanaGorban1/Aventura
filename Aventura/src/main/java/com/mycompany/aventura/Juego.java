@@ -25,7 +25,7 @@ public class Juego {
 
     Scanner teclado = new Scanner(System.in);
     Random r = new Random();
-
+  
     public Juego() {
         enemigos = new ArrayList<>();
         enemigos.add(new Enemigo("Monstruo", 8, 7, 10));
@@ -75,11 +75,9 @@ public class Juego {
     //metodo de combate
     public boolean combateConMonstrue() {
         boolean jugadorMuerte = false;
-        Random r = new Random();
         int menu = 0;
         Enemigo enemigo = enemigos.get(0);
-        int randomArma = r.nextInt(0, armas.size() - 1);
-
+        
         do {
             System.out.println("¿Que queres haser? 1.Atacar 2.Curar(vida+2) 3.Fin del combate");
             menu = teclado.nextInt();
@@ -95,6 +93,10 @@ public class Juego {
                                 + jugador.getArma().getDanioMaximo());
 //Danio que el jugador hace de monstruo (numero aleatorio)
                         int danioJugador = jugador.atacar();
+                        if (enemigo instanceof Defendible) {
+                            Defendible defensa = (Defendible) enemigo;
+                            danioJugador = defensa.modificarDanioRecibido(danioJugador);
+                        }
                         enemigo.restarHP(danioJugador);
                         if (enemigo.getVida() <= 0) {
                             enemigo.setDerrotado(true);
@@ -102,12 +104,7 @@ public class Juego {
                         System.out.println("Atacas con " + enemigo.getTipo() + " y haces " + danioJugador + " de daño");
 //Si enemigo tiene vida, el atace                    
                         if (enemigo.getVida() >= 1) {
-                            
                             int danioMonstruo;
-                            if (enemigo instanceof Defendible) {
-                                Orco orco = (Orco) enemigo;
-                                danioMonstruo = orco.modificarDanioRecibido();
-                            }
                             danioMonstruo = enemigo.atacar();
 
                             jugador.restarHP(danioMonstruo);
@@ -168,7 +165,7 @@ public class Juego {
         System.out.println("Jugador curar vida(+2) y el jugador tiene vida: "
                 + jugador.getVida());
         jugador.setArma(armasEspecial.get(r.nextInt(0, armasEspecial.size())));
-        System.out.println("Ahora el jugador tiene una arma especial: " + jugador.getArma().toString());
+        System.out.println("Ahora el jugador tiene una arma especial: " + jugador.getArma().getTipo());
     }
 
     //fin del juego
