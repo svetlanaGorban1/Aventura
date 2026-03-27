@@ -25,7 +25,7 @@ public class Orco extends Enemigo implements Defendible {
     
     @Override
     public int modificarDanioRecibido(){
-        int danio=0;
+        int danio=atacar()-2;
         return danio;
     }
 }

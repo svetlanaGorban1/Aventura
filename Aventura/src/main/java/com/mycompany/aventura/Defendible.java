@@ -10,5 +10,4 @@ package com.mycompany.aventura;
  */
 public interface Defendible {
     public int modificarDanioRecibido();
-    
-}
+    }
