@@ -10,7 +10,7 @@ import java.util.Random;
  *
  * @author damt110
  */
-public class Arma {
+public class Arma implements Comparable<Arma>{
 
     private String tipo;
     private int danioMaximo;
@@ -40,6 +40,11 @@ public class Arma {
         Random r = new Random();
         int danio = r.nextInt(1, danioMaximo);
         return danio;
+    }
+
+    @Override
+    public int compareTo(Arma o) {
+        return Integer.compare(this.danioMaximo, o.danioMaximo);
     }
     
 }

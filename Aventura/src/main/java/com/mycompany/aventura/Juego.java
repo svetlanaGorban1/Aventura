@@ -5,6 +5,7 @@
 package com.mycompany.aventura;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -25,7 +26,7 @@ public class Juego {
 
     Scanner teclado = new Scanner(System.in);
     Random r = new Random();
-  
+
     public Juego() {
         enemigos = new ArrayList<>();
         enemigos.add(new Enemigo("Monstruo", 8, 7, 10));
@@ -40,8 +41,9 @@ public class Juego {
         armas.add(new Arma("Porra", 8));
 
         armasEspecial = new ArrayList<>();
-        armasEspecial.add(new Arma("Espada de acero", 7));
-        armasEspecial.add(new Arma("Sable", 8));
+        armasEspecial.add(new Arma("Espada de acero", 9));
+        armasEspecial.add(new Arma("Sable", 6));
+        armasEspecial.add(new Arma("Sable de acero", 7));
     }
 
     public int leerOpcion(int min, int max) {
@@ -77,7 +79,7 @@ public class Juego {
         boolean jugadorMuerte = false;
         int menu = 0;
         Enemigo enemigo = enemigos.get(0);
-        
+
         do {
             System.out.println("¿Que queres haser? 1.Atacar 2.Curar(vida+2) 3.Fin del combate");
             menu = teclado.nextInt();
@@ -101,7 +103,8 @@ public class Juego {
                         if (enemigo.getVida() <= 0) {
                             enemigo.setDerrotado(true);
                         }
-                        System.out.println("Atacas con " + enemigo.getTipo() + " y haces " + danioJugador + " de daño");
+                        System.out.println("Atacas con " + enemigo.getTipo() + " y haces " + danioJugador
+                                + " de daño y vida de jugador:" + jugador.getVida());
 //Si enemigo tiene vida, el atace                    
                         if (enemigo.getVida() >= 1) {
                             int danioMonstruo;
@@ -132,11 +135,6 @@ public class Juego {
             jugadorMuerte = false;
         }
 
-        /* if (jugadorMuerte==true){
-            malFinal();
-        }else{
-            buenFinal();
-        }*/
         return jugadorMuerte;
     }
 
@@ -146,8 +144,6 @@ public class Juego {
 
     public void buenFinal() {
         System.out.println("El jugador ganado el combate ");
-        //  enemigoMuerte = true;
-        //  eligirMenu();
     }
 
     public void norte() {
@@ -164,6 +160,8 @@ public class Juego {
         System.out.println("Lugar de la batalla ha sido cambiado");
         System.out.println("Jugador curar vida(+2) y el jugador tiene vida: "
                 + jugador.getVida());
+        System.out.println("Cambiar arma por arma especial");
+        ordenarArmasEspeciales();
         jugador.setArma(armasEspecial.get(r.nextInt(0, armasEspecial.size())));
         System.out.println("Ahora el jugador tiene una arma especial: " + jugador.getArma().getTipo());
     }
@@ -192,5 +190,9 @@ public class Juego {
                     break;
             }
         } while (menu != 3);
+    }
+    
+    public void ordenarArmasEspeciales(){
+        Collections.sort(armasEspecial);
     }
 }
