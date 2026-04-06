@@ -160,9 +160,9 @@ public class Juego {
         System.out.println("Lugar de la batalla ha sido cambiado");
         System.out.println("Jugador curar vida(+2) y el jugador tiene vida: "
                 + jugador.getVida());
-        System.out.println("Cambiar arma por arma especial");
+        System.out.println("Cambiar arma por arma especial:");
         ordenarArmasEspeciales();
-        jugador.setArma(armasEspecial.get(r.nextInt(0, armasEspecial.size())));
+        jugador.setArma(armasEspecial.get(max));
         System.out.println("Ahora el jugador tiene una arma especial: " + jugador.getArma().getTipo());
     }
 
