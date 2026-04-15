@@ -61,7 +61,7 @@ public class Juego {
         System.out.println("La Historia impieza");
         System.out.println("Introduce nombre del jugador");
         String nombre = teclado.nextLine();
-        jugador = new Jugador(nombre, armas.get(0), 5, 10);
+        jugador = new Jugador(nombre, armas.get(r.nextInt(0, armas.size())), 5, 10);
         eligirMenu();
     }
 
