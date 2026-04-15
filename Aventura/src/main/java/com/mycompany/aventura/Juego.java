@@ -41,8 +41,8 @@ public class Juego {
         armas.add(new Arma("Porra", 8));
 
         armasEspecial = new ArrayList<>();
-        armasEspecial.add(new Arma("Espada de acero", 9));
-        armasEspecial.add(new Arma("Sable", 6));
+        armasEspecial.add(new Arma("Espada de acero", 10));
+        armasEspecial.add(new Arma("Sable", 9));
         armasEspecial.add(new Arma("Sable de acero", 7));
     }
 
@@ -151,6 +151,8 @@ public class Juego {
         boolean resultado = combateConMonstrue();
         if (resultado == true) {
             malFinal();
+        }else{
+            buenFinal();
         }
     }
 
@@ -161,9 +163,11 @@ public class Juego {
         System.out.println("Jugador curar vida(+2) y el jugador tiene vida: "
                 + jugador.getVida());
         System.out.println("Cambiar arma por arma especial:");
-        ordenarArmasEspeciales();
-        jugador.setArma(armasEspecial.get(max));
-        System.out.println("Ahora el jugador tiene una arma especial: " + jugador.getArma().getTipo());
+        //methodo ordenar y luego eligir una arma con mas daño
+        ordenarArmasEspeciales();              
+        jugador.setArma(armasEspecial.getLast());
+        System.out.println("Ahora el jugador tiene una arma especial: " + jugador.getArma().getTipo()
+                +" con daño max:"+jugador.getArma().getDanioMaximo());
     }
 
     //fin del juego
